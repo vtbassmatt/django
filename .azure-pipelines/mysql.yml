@@ -1,0 +1,10 @@
+jobs:
+- template: common.yml
+  parameters:
+    name: MySQL
+    platform: Linux
+    settings: ci_settings.mysql
+    container_name: mysql-container
+    container_startup: docker run --name mysql-container -P -e MYSQL_ROOT_PASSWORD=super-secret -e MYSQL_ROOT_HOST=% -d mysql:8.0
+    additional_apt_gets: python3-dev libmysqlclient-dev
+    additional_requirements: requirements/mysql.txt

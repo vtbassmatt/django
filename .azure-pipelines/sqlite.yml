@@ -1,0 +1,18 @@
+jobs:
+- template: common.yml
+  parameters:
+    name: SQLite
+    platform: Linux
+    settings: ci_settings.sqlite
+    py_3_5: true
+    py_3_6: true
+    py_3_7: true
+
+- template: common.yml
+  parameters:
+    name: SQLite
+    platform: Windows
+    settings: ci_settings.sqlite
+    py_3_5: true
+    py_3_6: true
+    py_3_7: true
