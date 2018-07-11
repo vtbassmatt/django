@@ -1,0 +1,68 @@
+parameters:
+  name: ''
+  queue: ''
+  platform: ''
+
+phases:
+
+- phase: ${{ parameters.name }}
+  queue:
+    name: ${{ parameters.queue }}
+    parallel: 3
+    matrix:
+      Python35:
+        PYTHON_VERSION: '3.5'
+      Python36:
+        PYTHON_VERSION: '3.6'
+      ${{ if eq(parameters.platform, 'Linux') }}:
+        Python37:
+          PYTHON_VERSION: '3.7'
+      # Python38-dev:
+      #   PYTHON_VERSION: '>= 3.8.0a'
+
+  steps:
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(PYTHON_VERSION)'
+        architecture: 'x64'
+      displayName: Use Python version $(PYTHON_VERSION)
+    
+    - ${{ if eq(parameters.platform, 'Linux') }}:
+      - bash: |
+          sudo apt-get -yq update
+          sudo apt-get -yq install libmemcached-dev
+        displayName: Setup Linux environment
+
+    - script: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install unittest-xml-reporting
+      displayName: Setup Python environment
+
+    - script: |
+        pushd tests
+        pip install -r requirements/py3.txt
+        pip install -e ..
+        python runtests.py --noinput --settings test_sqlite_vsts_ci --verbosity 2
+        exit 0
+      displayName: Run tests
+      continueOnError: true
+    
+    # Skipped tests generate an invalid startDate. Until it's fixed,
+    # delete test results which contain illegal timestamps.
+    # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
+    - bash: |
+        pushd tests
+        BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
+        echo $BAD_RESULTS
+        rm $BAD_RESULTS
+        exit 0
+      displayName: Remove skipped test results
+      continueOnError: true
+
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: "**/TEST-*.xml"
+        testRunTitle: 'Python $(PYTHON_VERSION)'
+      displayName: Publish test results

@@ -1,0 +1,12 @@
+phases:
+- template: build.yml
+  parameters:
+    name: Linux
+    queue: Hosted Linux Preview
+    platform: Linux
+
+- template: build.yml
+  parameters:
+    name: Windows
+    queue: Hosted VS2017
+    platform: Windows
