@@ -51,7 +51,7 @@ phases:
     - task: PublishBuildArtifacts@1
       displayName: Publish raw test XMLs
       inputs:
-        pathToPublish: $(Build.SourcesDirectory)/**/TEST-*.xml
+        pathToPublish: $(Build.SourcesDirectory)/tests/TEST-*.xml
         artifactName: raw-test-xmls
 
     # Skipped tests generate an invalid startDate. Until it's fixed,
