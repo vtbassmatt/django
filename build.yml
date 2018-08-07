@@ -52,7 +52,7 @@ phases:
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
     - bash: |
         BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
-        if [ -z "$BAD_RESULTS" ]; then
+        if [ -n "$BAD_RESULTS" ]; then
           echo Removing: $BAD_RESULTS
           rm $BAD_RESULTS
         else
