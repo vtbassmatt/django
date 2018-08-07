@@ -43,7 +43,6 @@ phases:
         pip install -r requirements/py3.txt
         pip install -e ..
         python runtests.py --noinput --settings test_sqlite_vsts_ci --verbosity 2
-        exit 0
       displayName: Run tests
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
@@ -53,9 +52,12 @@ phases:
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
     - bash: |
         BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
-        echo $BAD_RESULTS
-        rm $BAD_RESULTS
-        exit 0
+        if [ -z "$BAD_RESULTS" ]; then
+          echo Removing: $BAD_RESULTS
+          rm $BAD_RESULTS
+        else
+          echo No results to remove.
+        fi
       displayName: Remove skipped test results
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
