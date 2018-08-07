@@ -58,10 +58,7 @@ phases:
     # delete test results which contain illegal timestamps.
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
     - bash: |
-        pwd
-        cd tests
-        pwd
-        BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
+        BAD_RESULTS=$(grep -El "0001-01-01" tests/TEST-*.xml)
         if [ -z "$BAD_RESULTS" ]; then
           echo Removing: $BAD_RESULTS
           rm $BAD_RESULTS
@@ -70,7 +67,6 @@ phases:
         fi
       displayName: Remove skipped test results
       continueOnError: true
-      workingDirectory: $(Build.SourcesDirectory)/tests
 
     - task: PublishTestResults@2
       inputs:
