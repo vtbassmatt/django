@@ -40,26 +40,25 @@ phases:
       displayName: Setup Python environment
 
     - script: |
-        pushd tests
         pip install -r requirements/py3.txt
         pip install -e ..
         python runtests.py --noinput --settings test_sqlite_vsts_ci --verbosity 2
         exit 0
       displayName: Run tests
       continueOnError: true
+      workingDirectory: $(Build.SourcesDirectory)/tests
     
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
     - bash: |
-        pushd tests
         BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
         echo $BAD_RESULTS
         rm $BAD_RESULTS
         exit 0
       displayName: Remove skipped test results
       continueOnError: true
-
+      workingDirectory: $(Build.SourcesDirectory)/tests
 
     - task: PublishTestResults@2
       inputs:
