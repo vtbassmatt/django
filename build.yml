@@ -48,16 +48,19 @@ phases:
       workingDirectory: $(Build.SourcesDirectory)/tests
 
     # ...and this is the CI system publishing it.
-    - task: PublishBuildArtifacts@1
-      displayName: Publish raw test XMLs
-      inputs:
-        pathToPublish: $(Build.SourcesDirectory)/tests/
-        artifactName: raw-test-xmls
+    # - task: PublishBuildArtifacts@1
+    #   displayName: Publish raw test XMLs
+    #   inputs:
+    #     pathToPublish: $(Build.SourcesDirectory)/tests/
+    #     artifactName: raw-test-xmls
 
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
     - bash: |
+        pwd
+        cd tests
+        pwd
         BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
         if [ -z "$BAD_RESULTS" ]; then
           echo Removing: $BAD_RESULTS
