@@ -14,9 +14,9 @@ phases:
 
 # TODO: generate an image which contains Python preinstalled
     - bash: |
-        sudo apt-get -yq update
-        sudo apt-get -yq install --no-install-recommends python3 python3-pip
-        sudo apt-get -yq install libmemcached-dev
+        apt-get -yq update
+        apt-get -yq install --no-install-recommends python3 python3-pip
+        apt-get -yq install libmemcached-dev
       displayName: Install Python and libmemcached-dev
 
     - script: |
