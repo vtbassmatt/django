@@ -10,7 +10,7 @@ phases:
     name: Ubuntu 16.04
     container: ${{ parameters.container }}
     env:
-      {{ insert }}: ${{ parameters.env }}
+      ${{ insert }}: ${{ parameters.env }}
 
   steps:
 
