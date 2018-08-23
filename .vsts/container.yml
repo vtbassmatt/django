@@ -1,7 +1,6 @@
 parameters:
   name: ''
   container: ''
-  env: {}
 
 phases:
 
@@ -9,8 +8,6 @@ phases:
   queue:
     name: Ubuntu 16.04
     container: ${{ parameters.container }}
-    env:
-      ${{ insert }}: ${{ parameters.env }}
 
   steps:
 
