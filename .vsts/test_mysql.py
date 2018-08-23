@@ -4,14 +4,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoci',
-        'USER': None,
-        'PASS': None,
+        'USER': 'root',
+        'PASS': 'super-secret',
     },
     'other': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangociother',
-        'USER': None,
-        'PASS': None,
+        'USER': 'root',
+        'PASS': 'super-secret',
     }
 }
 
