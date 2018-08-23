@@ -12,16 +12,12 @@ phases:
 
   steps:
 
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.6'
-        architecture: 'x64'
-      displayName: Use Python version 3.6
-    
+# TODO: generate an image which contains Python preinstalled
     - bash: |
         sudo apt-get -yq update
+        sudo apt-get -yq install --no-install-recommends python3 python3-pip
         sudo apt-get -yq install libmemcached-dev
-      displayName: Setup Linux environment
+      displayName: Install Python and libmemcached-dev
 
     - script: |
         python -m pip install --upgrade pip setuptools wheel
