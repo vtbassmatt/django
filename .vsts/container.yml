@@ -6,7 +6,8 @@ phases:
 
 - phase: ${{ parameters.name }}
   queue:
-    name: Ubuntu 16.04
+    #name: Ubuntu 16.04
+    name: Hosted Ubuntu 1604
     container: ${{ parameters.container }}
 
   steps:
