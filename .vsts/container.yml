@@ -14,8 +14,8 @@ phases:
 
 # TODO: put this in the base image
     - bash: |
-        apt-get -yq update
-        apt-get -yq install libmemcached-dev
+        sudo apt-get -yq update
+        sudo apt-get -yq install libmemcached-dev
       displayName: Install libmemcached-dev
 
 # TODO: put this in the base image
