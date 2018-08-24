@@ -14,17 +14,24 @@ phases:
   steps:
     - script: |
         pip install --user -r requirements/py3.txt
-        if [ -n "$EXTRA_REQS" ]
+        if [ -n "$EXTRA_REQS" ]; then
           pip install --user -r requirements/$EXTRA_REQS
         fi
         pip install --user -e ..
         python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
+      displayName: Install prereqs
+      continueOnError: true
+      workingDirectory: $(Build.SourcesDirectory)/tests
+      env:
+        EXTRA_REQS: ${{ parameters.extra_requirements_file }}
+    
+  steps:
+    - script: python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
-        EXTRA_REQS: ${{ parameters.extra_requirements_file }}
     
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
