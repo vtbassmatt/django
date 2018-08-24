@@ -18,6 +18,8 @@ phases:
       displayName: Run tests
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
+      env:
+        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
     
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
