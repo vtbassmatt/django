@@ -6,12 +6,16 @@ DATABASES = {
         'NAME': 'djangoci',
         'USER': 'root',
         'PASS': 'super-secret',
+        'HOST': 'localhost',
+        'PORT': '3306',
     },
     'other': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangociother',
         'USER': 'root',
         'PASS': 'super-secret',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
