@@ -18,7 +18,6 @@ phases:
           pip install --user -r requirements/$EXTRA_REQS
         fi
         pip install --user -e ..
-        python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Install prereqs
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
