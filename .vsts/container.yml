@@ -25,6 +25,10 @@ phases:
       env:
         EXTRA_REQS: ${{ parameters.extra_requirements_file }}
     
+    - script: |
+        mysql --host=127.0.0.1 --port=3306 -u root --password=secret --execute="SELECT User, Host FROM mysql.user"
+      displayName: Poke MySQL
+    
     - script: python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests
       continueOnError: true
