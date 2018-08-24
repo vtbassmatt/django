@@ -12,8 +12,8 @@ phases:
 
   steps:
     - script: |
-        pip install -r requirements/py3.txt
-        pip install -e ..
+        pip install --user -r requirements/py3.txt
+        pip install --user -e ..
         python runtests.py --noinput --settings ci.test_sqlite --verbosity 2
       displayName: Run tests
       continueOnError: true
