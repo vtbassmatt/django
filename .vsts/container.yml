@@ -14,7 +14,7 @@ phases:
     - script: |
         pip install --user -r requirements/py3.txt
         pip install --user -e ..
-        python runtests.py --noinput --settings ci.test_sqlite --verbosity 2
+        python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
