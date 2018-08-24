@@ -11,13 +11,6 @@ phases:
     container: ${{ parameters.container }}
 
   steps:
-
-# TODO: put this in the base image
-    - script: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install unittest-xml-reporting
-      displayName: Setup Python environment
-
     - script: |
         pip install -r requirements/py3.txt
         pip install -e ..
