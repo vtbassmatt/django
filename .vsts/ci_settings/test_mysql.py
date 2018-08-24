@@ -6,7 +6,7 @@ DATABASES = {
         'NAME': 'djangoci',
         'USER': 'root',
         'PASS': 'super-secret',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     },
     'other': {
@@ -14,7 +14,7 @@ DATABASES = {
         'NAME': 'djangociother',
         'USER': 'root',
         'PASS': 'super-secret',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
