@@ -20,5 +20,5 @@ phases:
   parameters:
     name: MySQL
     container: mysql8
-    start_script: start_mysql.sh
+    start_script: .vsts/start_mysql.sh
     extra_requirements_file: mysql.txt
