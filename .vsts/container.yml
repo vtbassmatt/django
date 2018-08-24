@@ -12,13 +12,13 @@ phases:
 
   steps:
 
-# TODO: generate an image which contains Python preinstalled
+# TODO: put this in the base image
     - bash: |
         apt-get -yq update
-        apt-get -yq install --no-install-recommends python3 python3-pip
         apt-get -yq install libmemcached-dev
-      displayName: Install Python and libmemcached-dev
+      displayName: Install libmemcached-dev
 
+# TODO: put this in the base image
     - script: |
         python -m pip install --upgrade pip setuptools wheel
         pip install unittest-xml-reporting
