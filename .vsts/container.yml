@@ -13,6 +13,7 @@ phases:
 
   steps:
     - script: |
+        pip install --user unittest-xml-reporting
         pip install --user -r requirements/py3.txt
         if [ -n "$EXTRA_REQS" ]; then
           pip install --user -r requirements/$EXTRA_REQS
