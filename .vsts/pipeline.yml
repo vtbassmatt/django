@@ -22,3 +22,4 @@ phases:
   parameters:
     name: MySQL
     container: mysql8
+    extra_requirements_file: mysql.txt

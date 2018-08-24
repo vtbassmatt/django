@@ -1,6 +1,7 @@
 parameters:
   name: ''
   container: ''
+  extra_requirements_file: ''
 
 phases:
 
@@ -13,6 +14,9 @@ phases:
   steps:
     - script: |
         pip install --user -r requirements/py3.txt
+        if [ -n "$EXTRA_REQS" ]
+          pip install --user -r requirements/$EXTRA_REQS
+        fi
         pip install --user -e ..
         python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests
@@ -20,6 +24,7 @@ phases:
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+        EXTRA_REQS: ${{ parameters.extra_requirements_file }}
     
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
