@@ -1,6 +1,7 @@
 parameters:
   name: ''
   container: ''
+  start_script: 'exit 0' # if nothing passed in, exit successfully
   extra_requirements_file: ''
 
 phases:
@@ -12,6 +13,9 @@ phases:
     container: ${{ parameters.container }}
 
   steps:
+    - script: ${{ parameters.start_script }}
+      displayName: Start database engine
+    
     - script: |
         pip install --user unittest-xml-reporting
         pip install --user -r requirements/py3.txt
@@ -24,12 +28,6 @@ phases:
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         EXTRA_REQS: ${{ parameters.extra_requirements_file }}
-    
-    - script: |
-        sudo -u mysql /usr/local/bin/docker-entrypoint.sh mysqld
-        sleep 10
-        mysql --host=127.0.0.1 --port=3306 -u root --password=secret --execute="SELECT User, Host FROM mysql.user"
-      displayName: Start MySQL
     
     - script: python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests

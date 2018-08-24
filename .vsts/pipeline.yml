@@ -1,9 +1,7 @@
 resources:
   containers:
   - container: mysql8
-    image: mattcooper/python-mysql:latest
-    env:
-      MYSQL_ROOT_PASSWORD: super-secret
+    image: mattcooper/python-mysql:latest      
 
 phases:
 # - template: steps.yml
@@ -22,4 +20,5 @@ phases:
   parameters:
     name: MySQL
     container: mysql8
+    start_script: start_mysql.sh
     extra_requirements_file: mysql.txt
