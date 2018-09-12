@@ -1,6 +1,11 @@
-phases:
-- phase: MySQL
+jobs:
+- job: MySQL
+  timeoutInMinutes: 360
   steps:
+    - bash: |
+        docker run --name mysql-container -P -e MYSQL_ROOT_PASSWORD=super-secret -e MYSQL_ROOT_HOST=% -d mysql:8.0
+      displayName: Spin up container
+
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.7'
@@ -10,6 +15,8 @@ phases:
     - bash: |
         sudo apt-get -yq update
         sudo apt-get -yq install libmemcached-dev
+        # required for mysqlclient
+        sudo apt-get -yq install python3-dev libmysqlclient-dev
       displayName: Setup Linux environment
 
     - script: |
@@ -19,14 +26,23 @@ phases:
 
     - script: |
         pip install -r requirements/py3.txt
+        pip install -r requirements/mysql.txt
         pip install -e ..
-        python runtests.py --noinput --settings ci_settings.sqlite --verbosity 2
+      displayName: Install requirements
+      workingDirectory: $(Build.SourcesDirectory)/tests
+      env:
+        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+    
+    - script: |
+        export CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql-container)
+        echo IP of container is $CONTAINER_IP
+        python runtests.py --noinput --settings ci_settings.test_mysql --verbosity 2
       displayName: Run tests
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
-
+    
     # Skipped tests generate an invalid startDate. Until it's fixed,
     # delete test results which contain illegal timestamps.
     # https://github.com/xmlrunner/unittest-xml-reporting/issues/168

@@ -1,20 +1,21 @@
 # This is the MySQL test settings file for use with VSTS CI.
+import os
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangoci',
         'USER': 'root',
-        'PASS': 'super-secret',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'super-secret',
+        'HOST': os.environ['CONTAINER_IP'],
         'PORT': '3306',
     },
     'other': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangociother',
         'USER': 'root',
-        'PASS': 'super-secret',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'super-secret',
+        'HOST': os.environ['CONTAINER_IP'],
         'PORT': '3306',
     }
 }
