@@ -1,15 +1,15 @@
 jobs:
-# - template: steps.yml
-#   parameters:
-#     name: Linux
-#     queue: Hosted Linux Preview
-#     platform: Linux
+- template: sqlite.yml
+  parameters:
+    name: Linux
+    vm: Ubuntu 16.04
+    platform: Linux
 
-# - template: steps.yml
-#   parameters:
-#     name: Windows
-#     queue: Hosted VS2017
-#     platform: Windows
+- template: sqlite.yml
+  parameters:
+    name: Windows
+    vm: VS2017-Win2016
+    platform: Windows
 
-- template: mysql.yml
+# - template: mysql.yml
   

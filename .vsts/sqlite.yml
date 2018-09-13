@@ -1,27 +1,28 @@
 parameters:
   name: ''
-  queue: ''
+  vm: ''
   platform: ''
 
-phases:
+jobs:
 
-- phase: ${{ parameters.name }}
-  queue:
-    name: ${{ parameters.queue }}
+- job: ${{ parameters.name }}
+
+  pool:
+    vmImage: ${{ parameters.vm }}
     parallel: 3
+
+  strategy:
     matrix:
       Python35:
         PYTHON_VERSION: '3.5'
       Python36:
         PYTHON_VERSION: '3.6'
-      ${{ if eq(parameters.platform, 'Linux') }}:
-        Python37:
-          PYTHON_VERSION: '3.7'
+      Python37:
+        PYTHON_VERSION: '3.7'
       # Python38-dev:
       #   PYTHON_VERSION: '>= 3.8.0a'
 
   steps:
-
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '$(PYTHON_VERSION)'
