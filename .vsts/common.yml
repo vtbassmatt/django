@@ -1,0 +1,117 @@
+parameters:
+  name: ''
+  platform: ''
+  settings: ''
+  py_3_5: false
+  py_3_6: false
+  py_3_7: true
+  py_3_8: false
+  container_name: ''
+  container_startup: ''
+  additional_apt_gets: ''
+  additional_requirements: ''
+
+jobs:
+- job: ${{ format('{0}_{1}', 'parameters.name', parameters.platform) }}
+
+  timeoutInMinutes: 360
+
+  pool:
+    ${{ if eq(parameters.platform, 'Windows') }}:
+      vmImage: VS2017-Win2016
+    ${{ if eq(parameters.platform, 'Linux') }}:
+      vmImage: Ubuntu 16.04
+
+  strategy:
+    matrix:
+      ${{ if eq(parameters.py_3_5, 'true') }}:
+        Python35:
+          PYTHON_VERSION: '3.5'
+      ${{ if eq(parameters.py_3_6, 'true') }}:
+        Python36:
+          PYTHON_VERSION: '3.6'
+      ${{ if eq(parameters.py_3_7, 'true') }}:
+        Python37:
+          PYTHON_VERSION: '3.7'
+      ${{ if eq(parameters.py_3_8, 'true') }}:
+        Python38:
+          PYTHON_VERSION: '>= 3.8.0a'
+
+  steps:
+    - ${{ if ne(parameters.container_startup, '') }}:
+      - bash: ${{ parameters.container_startup }}
+        displayName: Spin up container
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(PYTHON_VERSION)'
+        architecture: 'x64'
+      displayName: Use Python version $(PYTHON_VERSION)
+
+    - ${{ if eq(parameters.platform, 'Linux') }}:
+      - bash: |
+          sudo apt-get -yq update
+          sudo apt-get -yq install libmemcached-dev
+          if [ -n "$OTHER_APT" ]; then
+            sudo apt-get -yq install $OTHER_APT
+          fi
+        displayName: Setup Linux environment
+        variables:
+          OTHER_APT: ${{ parameters.additional_apt_gets }}
+
+    - script: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install unittest-xml-reporting
+      displayName: Setup Python environment
+
+    - script: |
+        pip install -r requirements/py3.txt
+        if [ -n "$OTHER_REQUIREMENTS" ]; then
+          pip install -r $OTHER_REQUIREMENTS
+        fi
+        pip install -e ..
+      displayName: Install requirements
+      workingDirectory: $(Build.SourcesDirectory)/tests
+      env:
+        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+      variables:
+        OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
+    
+    - script: |
+        if [ -n "$CONTAINER_NAME" ]; then
+          export CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME)
+          echo IP of container is $CONTAINER_IP
+        fi
+        python runtests.py --noinput --settings $SETTINGS_MODULE --verbosity 2
+      displayName: Run tests
+      continueOnError: true
+      workingDirectory: $(Build.SourcesDirectory)/tests
+      env:
+        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+      variables:
+        SETTINGS_MODULE: ${{ parameters.settings }}
+        CONTAINER_NAME: ${{ parameters.container_name }}
+
+    # Skipped tests generate an invalid startDate. Until it's fixed,
+    # delete test results which contain illegal timestamps.
+    # https://github.com/xmlrunner/unittest-xml-reporting/issues/168
+    - bash: |
+        BAD_RESULTS=$(grep -El "0001-01-01" TEST-*.xml)
+        if [ -n "$BAD_RESULTS" ]; then
+          echo Removing: $BAD_RESULTS
+          rm $BAD_RESULTS
+        else
+          echo No results to remove.
+        fi
+      displayName: Remove skipped test results
+      continueOnError: true
+      workingDirectory: $(Build.SourcesDirectory)/tests
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: "**/TEST-*.xml"
+        testRunTitle: '$(name) $(platform) $(PYTHON_VERSION)'
+      displayName: Publish test results
+      variables:
+        name: ${{ parameters.name }}
+        platform: ${{ parameters.plaform }}
