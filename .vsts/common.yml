@@ -56,7 +56,7 @@ jobs:
             sudo apt-get -yq install $OTHER_APT
           fi
         displayName: Setup Linux environment
-        variables:
+        env:
           OTHER_APT: ${{ parameters.additional_apt_gets }}
 
     - script: |
@@ -74,7 +74,6 @@ jobs:
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
-      variables:
         OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
     
     - script: |
@@ -88,7 +87,6 @@ jobs:
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
-      variables:
         SETTINGS_MODULE: ${{ parameters.settings }}
         CONTAINER_NAME: ${{ parameters.container_name }}
 
@@ -112,6 +110,6 @@ jobs:
         testResultsFiles: "**/TEST-*.xml"
         testRunTitle: '$(name) $(platform) $(PYTHON_VERSION)'
       displayName: Publish test results
-      variables:
+      env:
         name: ${{ parameters.name }}
         platform: ${{ parameters.plaform }}
