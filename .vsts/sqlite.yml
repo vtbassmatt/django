@@ -1,11 +1,9 @@
 parameters:
-  name: ''
   vm: ''
   platform: ''
 
 jobs:
-
-- job: ${{ parameters.name }}
+- job: ${{ format('{0} {1}', 'SQLite', parameters.platform }}
 
   pool:
     vmImage: ${{ parameters.vm }}
@@ -68,5 +66,5 @@ jobs:
     - task: PublishTestResults@2
       inputs:
         testResultsFiles: "**/TEST-*.xml"
-        testRunTitle: 'Python $(PYTHON_VERSION)'
+        testRunTitle: 'SQLite $() Python $(PYTHON_VERSION)'
       displayName: Publish test results

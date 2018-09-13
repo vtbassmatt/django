@@ -1,6 +1,12 @@
+parameters:
+  vm: ''
+  platform: ''
+
 jobs:
-- job: MySQL
+- job: ${{ format('{0} {1}', 'MySQL', parameters.platform }}
+  
   timeoutInMinutes: 360
+  
   steps:
     - bash: |
         docker run --name mysql-container -P -e MYSQL_ROOT_PASSWORD=super-secret -e MYSQL_ROOT_HOST=% -d mysql:8.0
@@ -12,12 +18,13 @@ jobs:
         architecture: 'x64'
       displayName: Use Python version 3.7
 
-    - bash: |
-        sudo apt-get -yq update
-        sudo apt-get -yq install libmemcached-dev
-        # required for mysqlclient
-        sudo apt-get -yq install python3-dev libmysqlclient-dev
-      displayName: Setup Linux environment
+    - ${{ if eq(parameters.platform, 'Linux') }}:
+      - bash: |
+          sudo apt-get -yq update
+          sudo apt-get -yq install libmemcached-dev
+          # required for mysqlclient
+          sudo apt-get -yq install python3-dev libmysqlclient-dev
+        displayName: Setup Linux environment
 
     - script: |
         python -m pip install --upgrade pip setuptools wheel

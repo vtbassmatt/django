@@ -1,15 +1,15 @@
 jobs:
 - template: sqlite.yml
   parameters:
-    name: Linux
     vm: Ubuntu 16.04
     platform: Linux
 
 - template: sqlite.yml
   parameters:
-    name: Windows
     vm: VS2017-Win2016
     platform: Windows
 
-# - template: mysql.yml
-  
+- template: mysql.yml
+  parameters:
+    vm: Ubuntu 16.04
+    platform: Linux
