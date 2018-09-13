@@ -1,4 +1,3 @@
 jobs:
 - template: sqlite.yml
-
 - template: mysql.yml
