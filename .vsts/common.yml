@@ -12,7 +12,7 @@ parameters:
   additional_requirements: ''
 
 jobs:
-- job: ${{ format('{0}_{1}', 'parameters.name', parameters.platform) }}
+- job: ${{ format('{0}_{1}', parameters.name, parameters.platform) }}
 
   timeoutInMinutes: 360
 
