@@ -9,9 +9,9 @@ jobs:
 
   pool:
     vmImage: ${{ parameters.vm }}
-    parallel: 3
 
   strategy:
+    maxParallel: 3
     matrix:
       Python35:
         PYTHON_VERSION: '3.5'
