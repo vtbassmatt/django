@@ -73,7 +73,7 @@ jobs:
       displayName: Install requirements
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
-        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+        PYTHONPATH: $(Build.SourcesDirectory)/.azure-pipelines/
         OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
     
     - bash: |
@@ -86,7 +86,7 @@ jobs:
       continueOnError: true
       workingDirectory: $(Build.SourcesDirectory)/tests
       env:
-        PYTHONPATH: $(Build.SourcesDirectory)/.vsts/
+        PYTHONPATH: $(Build.SourcesDirectory)/.azure-pipelines/
         SETTINGS_MODULE: ${{ parameters.settings }}
         CONTAINER_NAME: ${{ parameters.container_name }}
 
