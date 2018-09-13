@@ -2,3 +2,6 @@ jobs:
 - template: sqlite.yml
 
 - template: mysql.yml
+
+strategy:
+  maxParallel: 10
