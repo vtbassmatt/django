@@ -77,9 +77,10 @@ jobs:
         PYTHONPATH: $(Build.SourcesDirectory)/.azure-pipelines/
         OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
 
-    - ${{ if eq(parameters.run_memcached, 'true') }}:
+    - ${{ if eq(parameters.platform, 'Linux') }}:
       - bash: memcached -d
         displayName: Start memcached
+        condition: eq(parameters.run_memcached, 'true')
     
     - bash: |
         if [ -n "$CONTAINER_NAME" ]; then
