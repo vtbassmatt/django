@@ -10,6 +10,10 @@ parameters:
   container_startup: ''
   additional_apt_gets: ''
   additional_requirements: ''
+  ${{ if eq(parameters.platform, 'Windows') }}:
+    run_memcached: 'false'
+  ${{ if eq(parameters.platform, 'Linux') }}:
+    run_memcached: 'true'
 
 jobs:
 - job: ${{ format('{0}_{1}', parameters.name, parameters.platform) }}
@@ -51,7 +55,7 @@ jobs:
     - ${{ if eq(parameters.platform, 'Linux') }}:
       - bash: |
           sudo apt-get -yq update
-          sudo apt-get -yq install libmemcached-dev
+          sudo apt-get -yq install libmemcached-dev memcached
           if [ -n "$OTHER_APT" ]; then
             sudo apt-get -yq install $OTHER_APT
           fi
@@ -75,6 +79,10 @@ jobs:
       env:
         PYTHONPATH: $(Build.SourcesDirectory)/.azure-pipelines/
         OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
+
+    - ${{ if eq(parameters.run_memcached, 'true') }}:
+      - bash: memcached -d
+        displayName: Start memcached
     
     - bash: |
         if [ -n "$CONTAINER_NAME" ]; then

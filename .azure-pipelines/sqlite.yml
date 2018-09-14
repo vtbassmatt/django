@@ -7,6 +7,7 @@ jobs:
     py_3_5: true
     py_3_6: true
     py_3_7: true
+    run_memcached: false
 
 - template: common.yml
   parameters:

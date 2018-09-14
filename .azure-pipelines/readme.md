@@ -14,6 +14,7 @@ Those templates in turn drive the right settings into `common.yml`, where the bu
 - container_startup: Optional: if this build requires a container, put its `docker run` string here
 - additional_apt_gets: Optional: if the build requires additional `apt-get install`s on Linux, list them here
 - additional_requirements: Optional: if the build requires additional requirements.txt installs, point to that requirements.txt file here
+- run_memcached: Optional: on Linux, memcached will automatically start up unless you set this to 'false'. on Windows, memcached is not available
 
 `mysql.yml` is a good starting point for adding new container-based configurations.
 `sqlite.yml` is a good starting point for adding new multi-platform configurations (it builds on Windows and Linux).
