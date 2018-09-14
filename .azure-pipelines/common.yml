@@ -80,7 +80,9 @@ jobs:
     - ${{ if eq(parameters.platform, 'Linux') }}:
       - bash: memcached -d
         displayName: Start memcached
-        condition: eq(parameters.run_memcached, 'true')
+        condition: eq(variables.run_memcached, 'true')
+        env:
+          run_memcached: ${{ parameters.run_memcached }}
     
     - bash: |
         if [ -n "$CONTAINER_NAME" ]; then
