@@ -10,10 +10,7 @@ parameters:
   container_startup: ''
   additional_apt_gets: ''
   additional_requirements: ''
-  ${{ if eq(parameters.platform, 'Windows') }}:
-    run_memcached: 'false'
-  ${{ if eq(parameters.platform, 'Linux') }}:
-    run_memcached: 'true'
+  run_memcached: $[ eq(parameters.platform, 'Linux') ]
 
 jobs:
 - job: ${{ format('{0}_{1}', parameters.name, parameters.platform) }}
