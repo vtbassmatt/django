@@ -10,7 +10,7 @@ parameters:
   container_startup: ''
   additional_apt_gets: ''
   additional_requirements: ''
-  run_memcached: $[ eq(parameters.platform, 'Linux') ]
+  run_memcached: 'true'
 
 jobs:
 - job: ${{ format('{0}_{1}', parameters.name, parameters.platform) }}
