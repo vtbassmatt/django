@@ -77,12 +77,11 @@ jobs:
         PYTHONPATH: $(Build.SourcesDirectory)/.azure-pipelines/
         OTHER_REQUIREMENTS: ${{ parameters.additional_requirements }}
 
-    - ${{ if eq(parameters.platform, 'Linux') }}:
-      - bash: memcached -d
-        displayName: Start memcached
-        condition: eq(variables.run_memcached, 'true')
-        env:
-          run_memcached: ${{ parameters.run_memcached }}
+    - ${{ if and(eq(parameters.platform, 'Linux'), eq(parameters.run_memcached, 'true')) }}:
+      - bash: |
+          sudo apt-get -yq install memcached
+          memcached -d
+        displayName: Run memcached
     
     - bash: |
         if [ -n "$CONTAINER_NAME" ]; then
