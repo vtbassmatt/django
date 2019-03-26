@@ -22,3 +22,4 @@ steps:
     testResultsFiles: "**/TEST-*.xml"
     testRunTitle: '$(COMPOSE_SERVICE) Python $(PYTHON_VERSION)'
   displayName: Publish test results
+  condition: always()

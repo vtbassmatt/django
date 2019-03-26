@@ -65,6 +65,13 @@ jobs:
   variables:
     DJANGO_PATH: $(Build.SourcesDirectory)
     PYTHON_VERSION: '3.6'
+  
+  strategy:
+    matrix:
+      Docs:
+        target: 'docs'
+      Flake8:
+        target: 'flake8'
 
   steps:
   - script: git clone https://github.com/orf/django-docker-box.git
@@ -72,15 +79,10 @@ jobs:
     workingDirectory: $(Build.SourcesDirectory)
 
   - script: |
-      docker-compose pull docs
-      docker-compose pull flake8
+      docker-compose pull $(target)
     displayName: Get images
     workingDirectory: $(Build.SourcesDirectory)/django-docker-box
 
-  - script: docker-compose run --rm docs
-    displayName: Run docs
-    workingDirectory: $(Build.SourcesDirectory)/django-docker-box
-
-  - script: docker-compose run --rm flake8
-    displayName: Run flake8
+  - script: docker-compose run --rm $(target)
+    displayName: Run $(target)
     workingDirectory: $(Build.SourcesDirectory)/django-docker-box
